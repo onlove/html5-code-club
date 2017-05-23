@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body, ul, ol {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        img {
+            border: none;
+            vertical-align: top;
+        }
+
+        #box {
+            width: 470px;
+            height: 150px;
+            position: relative;
+            margin: 30px auto;
+            overflow: hidden;
+        }
+
+        ul {
+            width: 470px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
+        }
+
+        ul li {
+            position: absolute;
+            top: 0;
+            width: 470px;
+        }
+
+        ol {
+            z-index: 2;
+            width: 120px;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
+
+        ol li {
+            width: 20px;
+            height: 20px;
+            float: left;
+            margin: 0 2px;
+            display: inline;
+            background: #fff;
+            color: #f60;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <ul>
+        <li style="display:block"><img src="images/1.jpg" alt=""/></li>
+        <li><img src="images/2.jpg" alt=""/></li>
+        <li><img src="images/3.jpg" alt=""/></li>
+        <li><img src="images/4.jpg" alt=""/></li>
+        <li><img src="images/5.jpg" alt=""/></li>
+    </ul>
+</div>
+<script src="move.js"></script>
+<script>
+    window.onload = function () {
+        var oUl = document.getElementsByTagName('ul')[0];
+        var aUlLi = oUl.getElementsByTagName('li');
+
+        var oneWidth = aUlLi[0].offsetWidth;
+        var num = Math.ceil(oneWidth / aUlLi.length);
+
+
+        for(var i = 1; i < aUlLi.length; i++) {
+            aUlLi[i].style.left = num * i + 'px';
+        }
+
+        for(var i = 0; i < aUlLi.length; i++) {
+            aUlLi[i].index = i;
+            aUlLi[i].onmouseover = function () {
+                for(var i = 0; i < aUlLi.length; i++) {
+                    if(i <= this.index) {
+                        startMove(aUlLi[i], {left: i * 30})
+                    }else{
+                        startMove(aUlLi[i], {left: (oneWidth - 120) + (i - 1) * 30})
+                    }
+                }
+            };
+
+            aUlLi[i].onmouseout = function () {
+                for(var i = 0; i < aUlLi.length; i++) {
+                    startMove(aUlLi[i], {left: i * num})
+                }
+            };
+        }
+    }
+</script>
+</body>
+</html>
