@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<input type="button" value="请求" id="button"><br/>
+<textarea style="width: 400px;height: 400px; border: 1px solid #000" id="textarea"></textarea>
+<script>
+
+// LBS  基于地理信息位置的信用
+
+/*
+* 地理位置对象
+*   单次定位请求: getCUrrentPosition
+*   多次定准请求: watchPosition
+*   关闭: clearWatch;
+* */
+
+window.onload = function () {
+    var oBtn = document.getElementById('button');
+    var oTextArea = document.getElementById('textarea');
+
+    oBtn.onclick = function () {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log(position.coords.longitude)
+        }, function (error){
+
+        }, {
+
+        })
+    }
+}
+    
+</script>
+</body>
+</html>

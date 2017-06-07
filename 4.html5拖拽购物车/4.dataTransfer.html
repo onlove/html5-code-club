@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin:0;
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
+        #div1{
+            margin: 200px;
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="div1">将文件拖拽到此区域</div>
+<script>
+    var oDiv = document.getElementById('div1');
+    oDiv.ondragenter = function () {
+        this.innerHTML = '可以释放';
+    };
+
+
+    oDiv.ondragleave = function () {
+        this.innerHTML = '将文件拖拽到此区域';
+    };
+
+    oDiv.ondragover = function (ev) {
+        ev.preventDefault();
+    };
+    oDiv.ondrop = function (ev) {
+        ev.preventDefault();
+
+        var fs = ev.dataTransfer.files;
+
+        var fd = new FileReader();
+        fd.readAsDataURL(fs[0]);
+        fd.onload = function () {
+            alert(this.result)
+        }
+    }
+
+</script>
+</body>
+</html>

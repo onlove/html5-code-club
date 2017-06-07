@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
+        .list{
+            margin: 50px auto;
+            width: 600px;
+            height: 420px;
+        }
+        .list li{
+            float: left;
+            width: 58px;
+            height: 58px;
+            border: 1px solid #000;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<ul class="list" id="list">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<script>
+    window.onload = function () {
+        var oUl = document.getElementById('list');
+        var aLi = oUl.getElementsByTagName('li');
+
+        var iRows = oUl.offsetHeight / aLi[0].offsetHeight;
+        var iCols = aLi.length / iRows;
+
+        var oXYLi = setXY (aLi, iRows, iCols)
+
+        for(var i = 0; i < aLi.length; i++) {
+            aLi[i].onclick = function () {
+                alert(this.xIndex + '||' +this.yIndex)
+            }
+        }
+        oXYLi[2][3].style.background = 'yellow';
+
+    };
+    function setXY (objs, iRows, iCols) {
+        var arr = [];
+
+        for(var i = 0; i < iRows; i++){
+            var arr2 = [];
+            for(var j = 0; j < iCols; j++) {
+                objs[i * iCols + j].xIndex = j;
+                objs[i * iCols + j].yIndex = i;
+                objs[i * iCols + j].innerHTML = "(" + i +", "+ j +")";
+                arr2.push(objs[i * iCols + j])
+            }
+            arr.push(arr2)
+        }
+        return arr;
+    }
+</script>
+</body>
+</html>

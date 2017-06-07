@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
+        .list{
+            margin: 50px auto;
+            width: 600px;
+            height: 420px;
+        }
+        .list li{
+            float: left;
+            width: 58px;
+            height: 58px;
+            border: 1px solid #000;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<input type="button" value="展开" />
+<input type="button" value="重置" />
+<ul class="list" id="list">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<script>
+    window.onload = function () {
+        var oUl = document.getElementById('list');
+        var aLi = oUl.getElementsByTagName('li');
+        var aInput = document.getElementsByTagName('input');
+
+        var iRows = oUl.offsetHeight / aLi[0].offsetHeight;
+        var iCols = aLi.length / iRows;
+
+        var oXYLi = setXY (aLi, iRows, iCols);
+
+        aInput[0].onclick = function () {
+            tab(oXYLi, iCols - 1, iRows - 1, function () {
+                this.style.background = 'yellow';
+            }, 50, -1, -1)
+        };
+
+        aInput[1].onclick = function () {
+            tab(oXYLi, 0, 0, function () {
+                this.style.background = 'red';
+            }, 50, 1, 1)
+        };
+
+
+    };
+
+    function tab(arr, x, y, fn, iDelay, iSpeedX, iSpeedY) {
+        if(!arr[y] || !arr[y][x]) return;
+        if(fn){
+            fn.call(arr[y][x]);
+            clearTimeout(arr[y][x].timer);
+            arr[y][x].timer = setTimeout(function () {
+                tab(arr, x, y + iSpeedY, fn, iDelay, iSpeedX, iSpeedY);
+                tab(arr, x + iSpeedX, y, fn, iDelay, iSpeedX, iSpeedY);
+            }, iDelay)
+        }
+    }
+
+    function setXY (objs, iRows, iCols) {
+        var arr = [];
+
+        for(var i = 0; i < iRows; i++){
+            var arr2 = [];
+            for(var j = 0; j < iCols; j++) {
+                objs[i * iCols + j].xIndex = j;
+                objs[i * iCols + j].yIndex = i;
+                arr2.push(objs[i * iCols + j])
+            }
+            arr.push(arr2)
+        }
+        return arr;
+    }
+</script>
+</body>
+</html>

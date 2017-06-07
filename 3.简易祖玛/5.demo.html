@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: black;
+        }
+
+        #div1 {
+            margin: 20px auto;
+            width: 600px;
+            height: 600px;
+            background: white;
+        }
+
+    </style>
+</head>
+<body>
+<div id="div1">
+    <canvas id="canvas" width="600" height="600"></canvas>
+</div>
+
+<script>
+    window.onload = function () {
+        var canvas = document.getElementById('canvas');
+        var cxt = canvas.getContext('2d');
+        var i = 0;
+        var objImg = new Image();
+
+        objImg.src = 'person.png';
+        objImg.onload = function () {
+            setInterval(function () {
+
+                cxt.clearRect(0, 0, canvas.width, canvas.height);
+
+                cxt.beginPath();
+                cxt.arc(300, 200, 200, -90 * Math.PI / 180, Math.PI, false);
+                cxt.stroke();
+
+                cxt.beginPath();
+                cxt.arc(250, 200, 150, Math.PI, 2 * Math.PI, false);
+                cxt.stroke();
+
+                cxt.beginPath();
+                cxt.arc(400, 200, 20, 0, 2 * Math.PI, false);
+                cxt.stroke();
+
+                for (var i = 0; i < balls.length; i++) {
+                    cxt.beginPath();
+                    cxt.moveTo(balls[i].x, balls[i].y);
+                    cxt.arc(balls[i].x, balls[i].y, 20, 0, 2 * Math.PI, false);
+                    cxt.fill();
+                }
+
+                cxt.save();
+                cxt.translate(300, 200);
+                cxt.rotate(iRotate);
+                cxt.translate(-40, -40);
+                cxt.drawImage(objImg, 0, 0);
+                cxt.restore();
+
+                for (var i = 0; i < bullets.length; i++) {
+                    cxt.save();
+                    cxt.fillStyle = 'red';
+                    cxt.beginPath();
+                    cxt.moveTo(bullets[i].x, bullets[i].y);
+                    cxt.arc(bullets[i].x, bullets[i].y, 20, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+                    cxt.fill();
+                    cxt.restore();
+                }
+
+                cxt.save();
+                cxt.font = '60px impact';
+                cxt.textBaseline = 'top';
+                cxt.fillStyle = 'red';
+                cxt.shadowOffsetX = 10;
+                cxt.shadowOffsetY = 10;
+                cxt.shadowColor = 'green';
+                cxt.shadowBlur = 5;
+                var w = cxt.measureText('简易祖玛').width;
+                var h = 60;
+                cxt.fillText('简易祖玛', (canvas.width - w) / 2, 450);
+                cxt.restore();
+
+            }, 1000 / 60);
+
+            setInterval(function () {
+                for (var i = 0; i < balls.length; i++) {
+                    balls[i].num++;
+
+                    if (balls[i].num == 270) {
+                        balls[i].r = 150;
+                        balls[i].startX = 250;
+                        balls[i].startY = 50;
+                    }
+
+                    if (balls[i].num == 270 + 180) {
+                        alert("游戏结束");
+                        window.location.reload();
+                    }
+
+                    balls[i].x = Math.sin(balls[i].num * Math.PI / 180) * balls[i].r + balls[i].startX;
+                    balls[i].y = balls[i].r - Math.cos(balls[i].num * Math.PI / 180) * balls[i].r + balls[i].startY;
+                }
+
+                for (var i = 0; i < bullets.length; i++) {
+                    bullets[i].x = bullets[i].x + bullets[i].sX;
+                    bullets[i].y = bullets[i].y + bullets[i].sY;
+                }
+
+                for (var i = 0; i < bullets.length; i++) {
+                    for (var j = 0; j < balls.length; j++) {
+
+                        if (pz(bullets[i].x, bullets[i].y, balls[j].x, balls[j].y)) {
+
+                            bullets.splice(i, 1);
+                            balls.splice(j, 1);
+                            break;
+
+                        }
+                    }
+                }
+
+            }, 30);
+
+
+            var balls = [];
+            setInterval(function () {
+                balls.push({
+                    x: 300,
+                    y: 0,
+                    r: 200,
+                    num: 0,
+                    startX: 300,
+                    startY: 0
+                })
+            }, 350);
+
+
+            var iRotate = 0;
+            canvas.onmousemove = function (ev) {
+                var ev = ev || window.event;
+
+                var x = ev.clientX - canvas.offsetLeft;
+                var y = ev.clientY - canvas.offsetTop;
+
+                var a = x - 300;
+                var b = y - 200;
+
+                var c = Math.sqrt(a * a + b * b);
+
+                if (a > 0 && b > 0) {
+                    iRotate = Math.asin(b / c) + 90 * Math.PI / 180;
+                } else if (a > 0) {
+                    iRotate = Math.asin(a / c);
+                }
+
+                if (a < 0 && b > 0) {
+                    iRotate = -(Math.asin(b / c) + 90 * Math.PI / 180);
+                } else if (a < 0) {
+                    iRotate = Math.asin(a / c);
+                }
+            };
+
+            var bullets = [];
+
+            canvas.onmousedown = function (ev) {
+                var ev = ev || window.event;
+
+                var x = ev.clientX - canvas.offsetLeft;
+                var y = ev.clientY - canvas.offsetTop;
+
+                var a = x - 300;
+                var b = y - 200;
+
+                var c = Math.sqrt(a * a + b * b);
+                var speed = 5;
+
+                var speedX = speed * a / c;
+                var speedY = speed * b / c;
+
+                bullets.push({
+                    x: 300,
+                    y: 200,
+                    sX: speedX,
+                    sY: speedY
+                })
+            }
+        };
+
+        function pz(x1, y1, x2, y2) {
+
+            var a = x1 - x2;
+            var b = y1 - y2;
+
+            var c = Math.sqrt(a * a + b * b);
+
+            if (c < 40) {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+
+    }
+</script>
+</body>
+</html>

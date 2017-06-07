@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background: black;
+        }
+        #div1{
+            margin: 20px auto;
+            width: 600px;
+            height: 600px;
+            background: white;
+        }
+
+    </style>
+</head>
+<body>
+<div id="div1">
+    <canvas id="canvas" width="600" height="600"></canvas>
+</div>
+
+<script>
+    window.onload = function () {
+        var canvas = document.getElementById('canvas');
+
+        var cxt = canvas.getContext('2d');
+        var i = 0;
+
+//        cxt.beginPath();
+//        cxt.arc(300, 200, 200, -90 * Math.PI / 180, Math.PI, false);
+//        cxt.stroke();
+//
+//        cxt.beginPath();
+//        cxt.arc(250, 200, 150, Math.PI, 2 * Math.PI, false);
+//        cxt.stroke();
+//
+//        cxt.beginPath();
+//        cxt.arc(400, 200, 20, 0, 2 * Math.PI, false);
+//        cxt.stroke();
+
+
+        setInterval(function () {
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
+
+            cxt.beginPath();
+            cxt.arc(i++, i++, 20, 0, 2 * Math.PI, false);
+            cxt.stroke();
+        }, 30)
+    }
+</script>
+</body>
+</html>

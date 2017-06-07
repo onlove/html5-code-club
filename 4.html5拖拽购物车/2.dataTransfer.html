@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin:0;
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
+
+        li{
+            margin: 10px;
+            width: 120px;
+            height: 30px;
+            background: yellow;
+        }
+        #div1{
+            margin: 200px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<ul>
+    <li draggable="true">a</li>
+    <li draggable="true">b</li>
+
+    <li draggable="true">c</li>
+</ul>
+<div id="div1"></div>
+<script>
+    var aLi = document.getElementsByTagName('li');
+    var oDiv = document.getElementById('div1');
+    var oUl = document.getElementsByTagName('ul')[0];
+    var i = 0;
+    for(var i = 0; i < aLi.length; i++) {
+        aLi[i].index = i;
+        aLi[i].ondragstart = function (ev) {
+            var ev = ev || window.event;
+
+            ev.dataTransfer.setData('name', this.index);
+            this.style.background = 'green';
+        };
+
+//        aLi[i].ondrag = function () {
+//            document.title = i++;
+//        }
+
+        aLi[i].ondragend = function () {
+            this.style.background = 'yellow';
+        };
+    }
+
+    oDiv.ondragenter = function () {
+        this.style.backgroundColor = 'blue';
+    };
+
+
+    oDiv.ondragleave = function () {
+        this.style.backgroundColor = 'red';
+    }
+
+
+    /* enter leave之间连续触发*/
+    oDiv.ondragover = function (ev) {
+        //要想触发drop事件,必须在dragover当中阻止默认事件
+         //document.title = i++;
+        ev.preventDefault();
+    };
+    oDiv.ondrop = function (ev) {
+//        alert(ev.dataTransfer.getData('name'))
+        oUl.removeChild(aLi[ev.dataTransfer.getData('name')]);
+
+        for(var i = 0; i < aLi.length; i++) {
+            aLi[i].index = i;
+        }
+    }
+    /* 拖拽事件顺序 */
+    /*
+    * 1.drop不触发时
+    *   dragstart --> drag --> dragenter --> dragover --> dragleave --> dragend
+    * 2.drop触发时
+    *   dragstart --> drag --> dragenter --> dragover --> drop --> dragend
+    * */
+</script>
+</body>
+</html>
