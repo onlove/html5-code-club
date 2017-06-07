@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #img1{
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="div">11111111111</div>
+<img src="1.jpg" id="img1">
+<script>
+    /*
+        拖拽三大事件mousedown mousemove mouseup
+    * */
+    window.onload = function () {
+        var oImg = document.getElementById('img1');
+        var disX = 0;
+        var disY = 0;
+
+        oImg.onmousedown = function(ev){
+            var ev = ev || window.event;
+            disX = ev.clientX - oImg.offsetLeft;
+            disY = ev.clientY - oImg.offsetTop;
+
+            id()
+
+            document.onmousemove = function (ev) {
+                var ev = ev || window.event;
+                oImg.style.left = ev.clientX - disX + 'px';
+                oImg.style.top = ev.clientY - disY + 'px';
+            };
+
+            document.onmouseup = function() {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
+
+            /* 解决拖拽图片的bug */
+            return false;
+        };
+
+
+    }
+
+
+</script>
+</body>
+</html>

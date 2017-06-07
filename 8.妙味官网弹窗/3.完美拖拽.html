@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #div{
+            position: absolute;
+            width: 210px;
+            height: 210px;
+            background: url("1.jpg") no-repeat;
+        }
+    </style>
+</head>
+<body>
+<div id="div">111111111111111111</div>
+<script>
+    /*
+        拖拽三大事件mousedown mousemove mouseup
+
+        setCapture() 全局捕获 生成透明去
+        releaseCapture() 释放全局捕获，删除层
+    * */
+    window.onload = function () {
+        var oDiv = document.getElementById('div');
+        var disX = 0;
+        var disY = 0;
+
+        oDiv.onmousedown = function(ev){
+            var ev = ev || window.event;
+            disX = ev.clientX - oDiv.offsetLeft;
+            disY = ev.clientY - oDiv.offsetTop;
+
+            if(oDiv.setCapture) {
+                oDiv.setCapture();
+            }
+            document.onmousemove = function (ev) {
+                var ev = ev || window.event;
+                oDiv.style.left = ev.clientX - disX + 'px';
+                oDiv.style.top = ev.clientY - disY + 'px';
+            };
+
+            document.onmouseup = function() {
+                document.onmousemove = null;
+                document.onmouseup = null;
+
+                if(oDiv.releaseCapture) {
+                    oDiv.releaseCapture();
+                }
+            };
+            return false;
+        };
+    }
+</script>
+</body>
+</html>

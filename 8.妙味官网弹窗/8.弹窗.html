@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #img1{
+            position: absolute;
+        }
+        .box{
+            position: absolute;
+            border: 1px solid #000000;
+        }
+    </style>
+</head>
+<body>
+<img src="1.jpg" id="img1">
+<script>
+    /*
+     拖拽三大事件mousedown mousemove mouseup
+     * */
+    window.onload = function () {
+        var oImg = document.getElementById('img1');
+        var disX = 0;
+        var disY = 0;
+
+        var prevX = 0;
+        var prevY = 0;
+        var iSpeedX = 0;
+        var iSpeedY = 0;
+
+        var timer = null;
+
+        oImg.style.width = 0;
+        oImg.style.height = 0;
+        oImg.style.left = document.documentElement.clientWidth / 2 + 'px';
+        oImg.style.top = document.documentElement.clientHeight / 2 + 'px';
+
+        toChange(210);
+
+        function toChange(iTarget) {
+            var offsetL = oImg.offsetLeft;
+            var offsetT = oImg.offsetTop;
+            var timer = setInterval(function () {
+
+                if(oImg.offsetWidth == iTarget) {
+                    clearInterval(timer);
+                    startMove();
+                }else{
+                    oImg.style.width = oImg.offsetWidth + 10 + 'px';
+                    oImg.style.height = oImg.offsetHeight + 10 + 'px';
+                    oImg.style.left = offsetL - oImg.offsetWidth / 2 + 'px';
+                    oImg.style.top = offsetT - oImg.offsetHeight / 2 + 'px';
+                }
+            }, 30);
+        }
+
+        oImg.onmousedown = function(ev){
+            var ev = ev || window.event;
+            disX = ev.clientX - oImg.offsetLeft;
+            disY = ev.clientY - oImg.offsetTop;
+
+            prevX = ev.clientX;
+            prevY = ev.clientY;
+
+            clearInterval(timer);
+
+            document.onmousemove = function (ev) {
+                var ev = ev || window.event;
+                oImg.style.left = ev.clientX - disX + 'px';
+                oImg.style.top = ev.clientY - disY + 'px';
+
+                iSpeedX = ev.clientX - prevX;
+                iSpeedY = ev.clientY - prevY;
+
+                prevX = ev.clientX;
+                prevY = ev.clientY;
+            };
+
+            document.onmouseup = function() {
+                document.onmousemove = null;
+                document.onmouseup = null;
+
+                startMove();
+            };
+
+            /* 解决拖拽图片的bug */
+            return false;
+        };
+
+
+        function startMove() {
+            clearInterval(timer);
+            timer = setInterval(function () {
+                iSpeedY += 3;
+
+                var l = oImg.offsetLeft + iSpeedX;
+                var t = oImg.offsetTop + iSpeedY;
+                if(l < 0) {
+                    l = 0;
+                    iSpeedX *= -1;
+                    iSpeedX *= 0.75;
+                }else if(l > document.documentElement.clientWidth - oImg.offsetWidth) {
+                    l = document.documentElement.clientWidth - oImg.offsetWidth;
+                    iSpeedX *= -1;
+                    iSpeedX *= 0.75;
+                }
+
+                if(t < 0) {
+                    t = 0;
+                    iSpeedY *= -1;
+                    iSpeedY *= 0.75;
+                }else if(t > document.documentElement.clientHeight - oImg.clientHeight) {
+                    t = document.documentElement.clientHeight - oImg.clientHeight;
+                    iSpeedY *= -1;
+                    iSpeedY *= 0.75;
+                    iSpeedX *= 0.75;
+                }
+
+                oImg.style.left = l + 'px';
+                oImg.style.top = t + 'px';
+            }, 30)
+        }
+
+    }
+
+
+</script>
+</body>
+</html>

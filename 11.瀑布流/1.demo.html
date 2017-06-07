@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            position: relative;
+            margin: 50px auto 0;
+            border: 1px solid red;
+        }
+
+        #container img {
+            position: absolute;
+        }
+
+        #loader {
+            width: 100%;
+            height: 60px;
+            background: url('loader.gif') no-repeat center #FFF;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<div id="loader"></div>
+
+<script src="jquery-1.9.1.min.js"></script>
+<script>
+    $(function () {
+        var oContainer = $("#container");
+        var oLoader = $("#loader");
+
+        var iWidth = 200;   //列宽
+        var iSpace = 10;   //间隔
+        var iOuterWidth = iWidth + iSpace;  //列实际宽
+        var iCells = 0;
+
+
+        var page = 0;
+        var sUrl = 'http://www.wookmark.com/api/json/popular?callback=?';
+
+        var arrL = [];
+        var arrT = [];
+
+        var iBtn = true;
+
+
+        function setCell() {
+            iCells = Math.floor($(window).innerWidth() / iOuterWidth);
+
+            if(iCells < 3) {
+                iCells = 3;
+            }else if(iCells > 6){
+                iCells = 6;
+            }
+
+            document.title = iCells;
+            oContainer.css('width', iOuterWidth * iCells - iSpace)
+        }
+        function getData() {
+            if(iBtn) {
+                oLoader.show();
+                iBtn = false;
+                page++;
+                $.getJSON(sUrl, {page: page}, function (res) {
+                    //console.log(res)
+                    $.each(res, function(index, item){
+                        var oImg = $("<img />");
+                        oImg.attr('src', item.preview);
+                        oContainer.append(oImg);
+
+                        var iHeight = iWidth / item.width * item.height;
+                        //获取top值最小
+                        var iMinIndex = getMin();
+
+                        oImg.css({
+                            left: arrL[iMinIndex],
+                            top: arrT[iMinIndex],
+                            width: iWidth,
+                            height: iHeight
+                        });
+
+                        arrT[iMinIndex] += iHeight + 10;
+                    })
+                    iBtn = true;
+                    oLoader.hide();
+                });
+            }
+
+        }
+
+
+        function getMin() {
+            var lv = arrT[0];
+            var _index = 0;
+            for(var i = 0; i < arrT.length; i++) {
+                if(arrT[i] < lv) {
+                    lv = arrT[i];
+                    _index = i;
+                }
+            }
+            return _index;
+        }
+
+        setCell();
+
+        for(var i = 0; i < iCells; i++) {
+            arrL.push(i * iOuterWidth);
+            arrT.push(0);
+        }
+
+        getData();
+
+        $(window).on('scroll', function () {
+            var iH = $(window).scrollTop() + $(window).innerHeight();
+            var iMinIndex = getMin();
+
+            if(arrT[iMinIndex] + oContainer.offset().top < iH) {
+                getData();
+            }
+        });
+
+        $(window).on("resize", function () {
+            var iOldCells = iCells;
+            setCell();
+
+            if(iOldCells == iCells) return;
+
+            arrL = [];
+            arrT = [];
+
+            for(var i = 0; i < iCells; i++) {
+                arrL.push(i * iOuterWidth);
+                arrT.push(0);
+            }
+
+            var oImgs = oContainer.find('img');
+            oImgs.each(function(index, item) {
+                var iMinIndex = getMin();
+
+                $(this).animate({
+                    left: arrL[iMinIndex],
+                    top: arrT[iMinIndex]
+                });
+
+                arrT[iMinIndex] += $(this).height() + 10;
+            })
+        })
+    })
+</script>
+</body>
+</html>
