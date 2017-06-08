@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>无标题文档</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #ul{
+            width: 1000px;
+            height: 30px;
+        }
+        #ul li{
+            float: left;
+            width: 100px;
+            height: 30px;
+            text-align: center;
+            line-height:30px;
+            color:#fff;
+            background: red;
+            border: 1px solid #000;
+            list-style: none;
+        }
+    </style>
+</head>
+
+
+<body>
+<ul id="ul">
+    <li data-music="a">11</li>
+    <li data-music="b">22</li>
+    <li data-music="c">33</li>
+    <li data-music="d">44</li>
+    <li data-music="e">55</li>
+    <li data-music="f">66</li>
+    <li data-music="g">77</li>
+</ul>
+<audio id="audio"></audio>
+<script>
+    /*
+    * 只有video才有的一些额外属性
+    * */
+    window.onload = function(){
+        var aLi = document.getElementById('ul').getElementsByTagName('li');
+        var oAudio = document.getElementById('audio');
+
+        for(var i = 0; i < aLi.length; i++) {
+            aLi[i].onmouseover = function () {
+                oAudio.src = 'http://s8.qhimg.com/share/audio/piano1/'+this.getAttribute('data-music')+'4.mp3';
+                oAudio.play();
+            }
+        }
+    };
+
+</script>
+</body>
+</html>

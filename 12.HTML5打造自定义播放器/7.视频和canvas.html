@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>无标题文档</title>
+</head>
+
+
+<body>
+<video controls id="video">
+    <source src="Intermission-Walk-in_512kb.mp4"></source>
+    <source src="Intermission-Walk-in.ogv"></source>
+</video>
+<canvas id="canvas"></canvas>
+<script>
+    /*
+    * 只有video才有的一些额外属性
+    * */
+    window.onload = function(){
+        var oVideo = document.getElementById('video');
+        var oCanvas = document.getElementById('canvas');
+
+        var cxt = canvas.getContext('2d');
+
+        oCanvas.width = oVideo.videoWidth;
+        oCanvas.height = oVideo.videoHeight;
+
+        setInterval(function () {
+            cxt.drawImage(oVideo, 0, 0)
+        }, 30)
+    };
+
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>无标题文档</title>
+    <meta charset="UTF-8">
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        #div1{
+            position: relative;
+            width: 300px;
+            height: 30px;
+            background-color: #eee;
+            overflow: hidden;
+        }
+        #div2{
+            position: absolute;
+            top: 0;
+            left:0;
+
+            width:40px;
+            height: 30px;
+            background: red;
+        }
+
+        #div3{
+            position: relative;
+            top: 10px;
+            width: 300px;
+            height: 10px;
+            background-color: #eee;
+            overflow: hidden;
+        }
+        #div4{
+            position: absolute;
+            top: 0;
+            left:260px;
+
+            width: 40px;
+            height: 10px;
+            background: yellow;
+        }
+    </style>
+</head>
+
+
+<body>
+<video id="video">
+    <source src="Intermission-Walk-in_512kb.mp4"></source>
+    <source src="Intermission-Walk-in.ogv"></source>
+</video>
+<br />
+<input type="button" value="播放">
+<input type="button" value="00:00:00">
+<input type="button" value="00:00:00">
+<input type="button" value="静音">
+<input type="button" value="全屏">
+<div id="div1">
+    <div id="div2"></div>
+</div>
+<div id="div3">
+    <div id="div4"></div>
+</div>
+<script>
+    /*
+    * 只有video才有的一些额外属性
+    * */
+    window.onload = function(){
+        var oVideo = document.getElementById('video');
+        var aInput = document.getElementsByTagName('input');
+
+
+        var oDiv1 = document.getElementById('div1');
+        var oDiv2 = document.getElementById('div2');
+        var oDiv3 = document.getElementById('div3');
+        var oDiv4 = document.getElementById('div4');
+
+        var disX = 0;
+        var disX2 = 0;
+
+        var timer = null;
+
+        aInput[0].onclick = function () {
+            if(oVideo.paused){
+                oVideo.play();
+                this.value = "暂停";
+                nowTime();
+                timer = setInterval(nowTime, 1000)
+            }else{
+                oVideo.pause();
+                this.value = "播放";
+
+                clearInterval(timer);
+            }
+        };
+
+        aInput[3].onclick = function () {
+            if(oVideo.muted) {
+                oVideo.volumn = 1;
+                this.value = '静音';
+                oVideo.muted = false;
+            }else{
+                oVideo.volumn = 0;
+                this.value = '取消静音';
+                oVideo.muted = true;
+            }
+        };
+
+        aInput[4].onclick = function () {
+            if(oVideo.requestFullScreen) {
+                oVideo.requestFullScreen();
+            } else if(oVideo.webkitRequestFullScreen ) {
+                oVideo.webkitRequestFullScreen();
+            } else if(oVideo.mozRequestFullScreen) {
+                oVideo.mozRequestFullScreen();
+            }
+        };
+
+        setTimeout(function (){
+            aInput[2].value = changeTime(oVideo.duration);
+        }, 1000)
+
+
+        function nowTime () {
+            aInput[1].value = changeTime(oVideo.currentTime);
+
+            var scale = oVideo.currentTime / oVideo.duration;
+
+            oDiv2.style.left = scale * 240 + 'px';
+        }
+
+        function changeTime(time){
+            var iNum = parseInt(time);
+
+            var iH = toZero(Math.floor(iNum / 3600));
+            var iM = toZero(Math.floor(iNum % 3600 / 60));
+            var iS = toZero(Math.floor(iNum % 60));
+            return iH + ':' + iM + ':' + iS;
+        }
+
+        function toZero(num){
+            return num <= 9 ? "0" + num : '' + num;
+        }
+
+        oDiv2.onmousedown = function(ev){
+            var ev = ev || window.event;
+            disX = ev.clientX - oDiv2.offsetLeft;
+
+            document.onmousemove = function(ev){
+                var ev = ev || window.event;
+
+                var L = ev.clientX - disX;
+
+                if(L < 0){
+                    L = 0;
+                }
+                else if(L>oDiv1.offsetWidth - oDiv2.offsetWidth){
+                    L = oDiv1.offsetWidth - oDiv2.offsetWidth;
+                }
+
+                oDiv2.style.left = L + 'px';
+
+                var scale =  L /(oDiv1.offsetWidth - oDiv2.offsetWidth);
+
+                oVideo.currentTime = scale * oVideo.duration;
+                nowTime();
+
+            };
+            document.onmouseup = function(){
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
+            return false;
+        };
+
+        oDiv4.onmousedown = function(ev){
+            var ev = ev || window.event;
+            disX2 = ev.clientX - oDiv4.offsetLeft
+
+            document.onmousemove = function (ev) {
+                var ev = ev || window.event;
+                var l = ev.clientX - disX2;
+                if(l < 0) {
+                    l = 0;
+                }else if(l > oDiv3.offsetWidth - oDiv4.offsetWidth) {
+                    l = oDiv3.offsetWidth - oDiv4.offsetWidth;
+                }
+
+                oDiv4.style.left = l + 'px';
+
+                var scale =  l /(oDiv3.offsetWidth - oDiv4.offsetWidth);
+                console.log(scale);
+                oVideo.volume = scale;
+            };
+
+            document.onmouseup = function (ev) {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
+            return false;
+        }
+    };
+
+</script>
+</body>
+</html>

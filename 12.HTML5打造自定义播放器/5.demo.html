@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>无标题文档</title>
+</head>
+
+<body>
+<video controls id="video">
+    <source src="Intermission-Walk-in_512kb.mp4"></source>
+    <source src="Intermission-Walk-in.ogv"></source>
+</video>
+<script>
+    /*
+    * 只有video才有的一些额外属性
+    * */
+    window.onload = function(){
+        var oVideo = document.getElementById('video');
+
+        oVideo.poster = '2.png';
+        oVideo.width = 500;
+        oVideo.height = 500;
+
+        console.log(oVideo.videoWidth);
+        oVideo.addEventListener('ended', function() {
+            console.log(123)
+        })
+    };
+
+</script>
+</body>
+</html>

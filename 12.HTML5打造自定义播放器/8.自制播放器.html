@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>无标题文档</title>
+    <meta charset="UTF-8">
+</head>
+
+
+<body>
+<video id="video">
+    <source src="Intermission-Walk-in_512kb.mp4"></source>
+    <source src="Intermission-Walk-in.ogv"></source>
+</video>
+<br />
+<input type="button" value="播放">
+<input type="button" value="00:00:00">
+<input type="button" value="00:00:00">
+<input type="button" value="静音">
+<input type="button" value="全屏">
+<script>
+    /*
+    * 只有video才有的一些额外属性
+    * */
+    window.onload = function(){
+        var oVideo = document.getElementById('video');
+        var aInput = document.getElementsByTagName('input');
+
+        var timer = null;
+
+        aInput[0].onclick = function () {
+            if(oVideo.paused){
+                oVideo.play();
+                this.value = "暂停";
+                nowTime();
+                timer = setInterval(nowTime, 1000)
+            }else{
+                oVideo.pause();
+                this.value = "播放";
+
+                clearInterval(timer);
+            }
+        };
+
+        aInput[3].onclick = function () {
+            if(oVideo.muted) {
+                oVideo.volumn = 1;
+                this.value = '静音';
+                oVideo.muted = false;
+            }else{
+                oVideo.volumn = 0;
+                this.value = '取消静音';
+                oVideo.muted = true;
+            }
+        };
+
+        aInput[4].onclick = function () {
+            if(oVideo.requestFullScreen) {
+                oVideo.requestFullScreen();
+            } else if(oVideo.webkitRequestFullScreen ) {
+                oVideo.webkitRequestFullScreen();
+            } else if(oVideo.mozRequestFullScreen) {
+                oVideo.mozRequestFullScreen();
+            }
+        };
+
+        aInput[2].value = changeTime(oVideo.duration);
+
+        function nowTime () {
+            aInput[1].value = changeTime(oVideo.currentTime)
+        }
+
+        function changeTime(time){
+            var iNum = parseInt(time);
+
+            var iH = toZero(Math.floor(iNum / 3600));
+            var iM = toZero(Math.floor(iNum % 3600 / 60));
+            var iS = toZero(Math.floor(iNum % 60));
+            return iH + ':' + iM + ':' + iS;
+        }
+
+        function toZero(num){
+            return num <= 9 ? "0" + num : '' + num;
+        }
+    };
+
+</script>
+</body>
+</html>

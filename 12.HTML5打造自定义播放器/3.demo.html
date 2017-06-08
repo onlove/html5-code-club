@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>无标题文档</title>
+</head>
+
+<body>
+<input type="button" value="重新加载" id="btn">
+<video controls id="video">
+    <source src="Intermission-Walk-in_512kb.mp4"></source>
+    <source src="Intermission-Walk-in.ogv"></source>
+</video>
+<script>
+
+    window.onload = function(){
+        var oVideo = document.getElementById('video');
+        var oBtn = document.getElementById('btn');
+        var aSource = document.getElementsByTagName('source');
+
+        oVideo.onmouseover = function() {
+            this.play();
+        }
+
+        oVideo.onmouseout = function() {
+            this.pause();
+        }
+
+        oBtn.onclick = function (){
+            aSource[0].src = '***.map4';
+            aSource[1].src = '***.map4';
+            oVideo.load();
+        }
+
+    };
+
+</script>
+</body>
+</html>

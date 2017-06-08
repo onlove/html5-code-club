@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>无标题文档</title>
+</head>
+
+<body>
+<video controls id="video">
+    <source src="Intermission-Walk-in_512kb.mp4"></source>
+    <source src="Intermission-Walk-in.ogv"></source>
+</video>
+<script>
+
+    window.onload = function(){
+        var oVideo = document.getElementById('video');
+
+        oVideo.addEventListener('ended', function() {
+            console.log(123)
+        })
+    };
+
+</script>
+</body>
+</html>
